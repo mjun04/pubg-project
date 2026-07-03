@@ -140,7 +140,7 @@ const normalizeAttachmentName = (rawName) => {
 export const collectSampleMatches = async () => {
   const sampleRes = await apiClient.get('/samples');
   const matches = sampleRes.data.data.relationships.matches.data;
-  return matches.slice(0, 10).map(m => m.id);
+  return matches.slice(0, 30).map(m => m.id);
 };
 
 export const downloadTelemetry = async (matchId) => {
@@ -397,7 +397,7 @@ export const getWeaponMeta = (mapName) => {
     return { ...w, mapEquips: equipsInMap };
   }).filter(w => w.mapEquips > 0);
 
-  if (totalMapEquips === 0) return cachedWeaponMeta;
+  if (totalMapEquips === 0) return []; 
 
   return mapWeapons.map(w => ({
     ...w,
