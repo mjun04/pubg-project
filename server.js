@@ -9,7 +9,9 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/api/weapons', async (req, res) => {
-  const mapName = req.query.map || 'Erangel';
+  // 수정된 부분: 프론트엔드에서 맵 파라미터가 안 넘어오면 기본값을 '전체'로 설정합니다!
+  const mapName = req.query.map || '전체'; 
+  
   try {
     const data = await getWeaponMeta(mapName);
     res.json(data);
