@@ -385,7 +385,25 @@ export const updateWeaponStatsAutomatically = async () => {
   }
 };
 
-export const getWeaponMeta = (mapName) => cachedWeaponMeta;
+export const getWeaponMeta = (mapName) => {
+  if (!mapName || mapName === "전체") return cachedWeaponMeta;
+  
+  const korMapName = FRONTEND_MAP_TO_KOR[mapName] || mapName;
+  let totalMapEquips = 0;
+  
+  const mapWeapons = cachedWeaponMeta.map(w => {
+    const equipsInMap = w.mapStats[korMapName] || 0;
+    totalMapEquips += equipsInMap;
+    return { ...w, mapEquips: equipsInMap };
+  }).filter(w => w.mapEquips > 0);
+
+  if (totalMapEquips === 0) return cachedWeaponMeta;
+
+  return mapWeapons.map(w => ({
+    ...w,
+    pickRate: parseFloat(((w.mapEquips / totalMapEquips) * 100).toFixed(2))
+  })).sort((a, b) => b.pickRate - a.pickRate);
+};
 
 export const searchPlayer = async (playerName) => {
   try {
