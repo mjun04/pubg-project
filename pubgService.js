@@ -387,22 +387,44 @@ export const updateWeaponStatsAutomatically = async () => {
 
 export const getWeaponMeta = (mapName) => {
   if (!mapName || mapName === "전체") return cachedWeaponMeta;
-  
-  const korMapName = FRONTEND_MAP_TO_KOR[mapName] || mapName;
-  let totalMapEquips = 0;
-  
-  const mapWeapons = cachedWeaponMeta.map(w => {
-    const equipsInMap = w.mapStats[korMapName] || 0;
-    totalMapEquips += equipsInMap;
-    return { ...w, mapEquips: equipsInMap };
-  }).filter(w => w.mapEquips > 0);
 
-  if (totalMapEquips === 0) return []; 
+  const FRONTEND_MAP_TO_KOR = {
+    "Erangel": "에란겔",
+    "Miramar": "미라마",
+    "Taego": "태이고",
+    "Rondo": "론도",
+    "Sanhok": "사녹",
+    "Vikendi": "비켄디",
+    "Deston": "데스턴",
+    "Karakin": "카라킨",
+    "Paramo": "파라모"
+  };
 
-  return mapWeapons.map(w => ({
-    ...w,
-    pickRate: parseFloat(((w.mapEquips / totalMapEquips) * 100).toFixed(2))
-  })).sort((a, b) => b.pickRate - a.pickRate);
+  try {
+    const korMapName = FRONTEND_MAP_TO_KOR[mapName] || mapName;
+    let totalMapEquips = 0;
+
+    if (!cachedWeaponMeta || cachedWeaponMeta.length === 0) return [];
+
+    const mapWeapons = cachedWeaponMeta.map(w => {
+      const stats = w.mapStats || {};
+      const equipsInMap = stats[korMapName] || 0;
+      totalMapEquips += equipsInMap;
+      
+      return { ...w, mapEquips: equipsInMap };
+    }).filter(w => w.mapEquips > 0);
+
+    if (totalMapEquips === 0) return [];
+
+    return mapWeapons.map(w => ({
+      ...w,
+      pickRate: parseFloat(((w.mapEquips / totalMapEquips) * 100).toFixed(2))
+    })).sort((a, b) => b.pickRate - a.pickRate);
+
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 };
 
 export const searchPlayer = async (playerName) => {
