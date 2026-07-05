@@ -49,7 +49,15 @@ const WEAPON_MAP = {
   "S686": "더블 배럴",
   "UZI": "우지",
   "MP5K": "MP5K",
-  "Crossbow": "석궁"
+  "Crossbow": "석궁",
+  "LynxAMR": "링스 AMR",
+  "Mk47Mutant": "Mk47 뮤턴트",
+  "Mosin": "모신 나간트",
+  "K2": "K2",
+  "O12": "O12",
+  "OriginS12": "O12",
+  "JS9": "JS9",
+  "MP9": "MP9"
 };
 
 const ATTACHMENT_MAP = {
