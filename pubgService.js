@@ -148,7 +148,7 @@ const normalizeAttachmentName = (rawName) => {
 export const collectSampleMatches = async () => {
   const sampleRes = await apiClient.get('/samples');
   const matches = sampleRes.data.data.relationships.matches.data;
-  return matches.slice(0, 10).map(m => m.id);
+  return matches.slice(0, 8).map(m => m.id);
 };
 
 export const downloadTelemetry = async (matchId) => {
